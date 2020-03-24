@@ -67,6 +67,15 @@ strip-bom@^2.0.0:
   dependencies:
     is-utf8 "^0.2.0"
 
+"teenpatti-rates@https://github.com/wohlig/teenpatti-rates":
+  version "1.0.0"
+  resolved "https://github.com/wohlig/teenpatti-rates#31e3582f742d1cd9b6835b71bbb12b19257d8929"
+  dependencies:
+    js-combinatorics "^0.5.5"
+    lodash "^4.17.15"
+    moment "^2.24.0"
+    teenpattisolver "^1.1.5"
+
 teenpattisolver@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/teenpattisolver/-/teenpattisolver-1.1.5.tgz#42c52f905173b20116a1c59007113a7fe5973395"
