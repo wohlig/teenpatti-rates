@@ -7,65 +7,70 @@ var Combinatorics = require("js-combinatorics");
 var allCards = _.map(Cards.getAllCards(), n => {
   return n.shortName;
 });
-var openCards = ["As", "Ah", "Ks"];
+var openCardsReq = ["As", "Ah", "Ks"];
 
-var player1Cards = _.filter(openCards, (n, index) => {
-  return index % 2 == 0;
-});
-var player1CardsRemaining = 3 - player1Cards.length;
-var player2Cards = _.filter(openCards, (n, index) => {
-  return index % 2 == 1;
-});
-var player2CardsRemaining = 3 - player2Cards.length;
-
-var usedCards = _.union(player1Cards, player2Cards);
-var remainingCards = _.xor(allCards, usedCards);
-var allCombinations = Combinatorics.bigCombination(
-  remainingCards,
-  6 - usedCards.length
-);
-var totalCombinations = allCombinations.length;
-console.log("Total Length", totalCombinations);
-var wins = { player1: 0, player2: 0, draw: 0 };
-var i = 0;
-while ((a = allCombinations.next())) {
-  var tempPlayer1Cards = [[]];
-  if (player1CardsRemaining != 0) {
-    tempPlayer1Cards = Combinatorics.combination(
-      a,
-      player1CardsRemaining
-    ).toArray();
-  }
-
-  var bruteCards = _.map(tempPlayer1Cards, n => {
-    return {
-      player1Cards: _.union(player1Cards, n),
-      player2Cards: _.union(player2Cards, _.difference(a, n))
-    };
+function getRatesForTeenPatti(openCards) {
+  var player1Cards = _.filter(openCards, (n, index) => {
+    return index % 2 == 0;
   });
+  var player1CardsRemaining = 3 - player1Cards.length;
+  var player2Cards = _.filter(openCards, (n, index) => {
+    return index % 2 == 1;
+  });
+  var player2CardsRemaining = 3 - player2Cards.length;
 
-  _.each(bruteCards, cardsObj => {
-    var player1Score = teenPattiScore.scoreHandsNormal(cardsObj.player1Cards);
-    var player2Score = teenPattiScore.scoreHandsNormal(cardsObj.player2Cards);
-    if (player1Score.score > player2Score.score) {
-      wins.player1++;
-    } else if (player1Score.score < player2Score.score) {
-      wins.player2++;
-    } else {
-      wins.draw++;
+  var usedCards = _.union(player1Cards, player2Cards);
+  var remainingCards = _.xor(allCards, usedCards);
+  var allCombinations = Combinatorics.bigCombination(
+    remainingCards,
+    6 - usedCards.length
+  );
+  var totalCombinations = allCombinations.length;
+  // console.log("Total Length", totalCombinations);
+  var wins = { player1: 0, player2: 0, draw: 0 };
+  // var i = 0;
+  while ((a = allCombinations.next())) {
+    var tempPlayer1Cards = [[]];
+    if (player1CardsRemaining != 0) {
+      tempPlayer1Cards = Combinatorics.combination(
+        a,
+        player1CardsRemaining
+      ).toArray();
     }
-  });
-  i++;
-  if (i % 10000 == 0) {
-    console.log(i, moment().diff(startTime) / 1000, bruteCards.length);
+
+    var bruteCards = _.map(tempPlayer1Cards, n => {
+      return {
+        player1Cards: _.union(player1Cards, n),
+        player2Cards: _.union(player2Cards, _.difference(a, n))
+      };
+    });
+
+    _.each(bruteCards, cardsObj => {
+      var player1Score = teenPattiScore.scoreHandsNormal(cardsObj.player1Cards);
+      var player2Score = teenPattiScore.scoreHandsNormal(cardsObj.player2Cards);
+      if (player1Score.score > player2Score.score) {
+        wins.player1++;
+      } else if (player1Score.score < player2Score.score) {
+        wins.player2++;
+      } else {
+        wins.draw++;
+      }
+    });
+    // i++;
+    // if (i % 10000 == 0) {
+    //   console.log(i, moment().diff(startTime) / 1000, bruteCards.length);
+    // }
   }
+  var totalOptions = wins.player1 + wins.player2 + wins.draw;
+  wins.player1Probability = wins.player1 / totalOptions;
+  wins.player2Probability = wins.player2 / totalOptions;
+  wins.drawProbability = wins.draw / totalOptions;
+  wins.player1Odds = 1 / wins.player1Probability - 1;
+  wins.player2Odds = 1 / wins.player2Probability - 1;
+  wins.drawOdds = 1 / wins.drawProbability - 1;
+  console.log(wins);
+  // console.log("Response Time in Seconds", moment().diff(startTime) / 1000);
+  return wins;
 }
-var totalOptions = wins.player1 + wins.player2 + wins.draw;
-wins.player1Probability = wins.player1 / totalOptions;
-wins.player2Probability = wins.player2 / totalOptions;
-wins.drawProbability = wins.draw / totalOptions;
-wins.player1Odds = 1 / wins.player1Probability - 1;
-wins.player2Odds = 1 / wins.player2Probability - 1;
-wins.drawOdds = 1 / wins.drawProbability - 1;
-console.log(wins);
-console.log(moment().diff(startTime) / 1000);
+
+getRatesForTeenPatti(openCardsReq);
