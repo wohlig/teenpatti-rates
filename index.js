@@ -7,10 +7,17 @@ var Combinatorics = require("js-combinatorics");
 var allCards = _.map(Cards.getAllCards(), n => {
   return n.shortName;
 });
-var player1Cards = ["As"];
+var openCards = ["As", "Ah", "Ks"];
+
+var player1Cards = _.filter(openCards, (n, index) => {
+  return index % 2 == 0;
+});
 var player1CardsRemaining = 3 - player1Cards.length;
-var player2Cards = [];
+var player2Cards = _.filter(openCards, (n, index) => {
+  return index % 2 == 1;
+});
 var player2CardsRemaining = 3 - player2Cards.length;
+
 var usedCards = _.union(player1Cards, player2Cards);
 var remainingCards = _.xor(allCards, usedCards);
 var allCombinations = Combinatorics.bigCombination(
@@ -22,10 +29,13 @@ console.log("Total Length", totalCombinations);
 var wins = { player1: 0, player2: 0, draw: 0 };
 var i = 0;
 while ((a = allCombinations.next())) {
-  var tempPlayer1Cards = Combinatorics.combination(
-    a,
-    player1CardsRemaining
-  ).toArray();
+  var tempPlayer1Cards = [[]];
+  if (player1CardsRemaining != 0) {
+    tempPlayer1Cards = Combinatorics.combination(
+      a,
+      player1CardsRemaining
+    ).toArray();
+  }
 
   var bruteCards = _.map(tempPlayer1Cards, n => {
     return {
