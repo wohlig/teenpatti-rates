@@ -66,7 +66,7 @@ function getRatesForTeenPatti(openCards) {
   wins.player1Odds = 1 / wins.player1Probability - 1;
   wins.player2Odds = 1 / wins.player2Probability - 1;
   wins.drawOdds = 1 / wins.drawProbability - 1;
-  console.log(wins);
+  // console.log(wins);
   // console.log("Response Time in Seconds", moment().diff(startTime) / 1000);
   return wins;
 }
