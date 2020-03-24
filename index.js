@@ -9,7 +9,7 @@ var allCards = _.map(Cards.getAllCards(), n => {
 });
 var player1Cards = ["As", "Ks"];
 var player1CardsRemaining = 3 - player1Cards.length;
-var player2Cards = ["Ah", "Kh"];
+var player2Cards = ["Ah"];
 var player2CardsRemaining = 3 - player2Cards.length;
 var usedCards = _.union(player1Cards, player2Cards);
 var remainingCards = _.xor(allCards, usedCards);
@@ -50,12 +50,12 @@ while ((a = allCombinations.next())) {
     console.log(i, moment().diff(startTime) / 1000, bruteCards.length);
   }
 }
-
-wins.player1Probability = wins.player1 / totalCombinations;
-wins.player2Probability = wins.player2 / totalCombinations;
-wins.drawProbability = wins.draw / totalCombinations;
-wins.player1Rate = 1 / wins.player1Probability;
-wins.player2Rate = 1 / wins.player2Probability;
-wins.drawRate = 1 / wins.drawProbability;
+var totalOptions = wins.player1 + wins.player2 + wins.draw;
+wins.player1Probability = wins.player1 / totalOptions;
+wins.player2Probability = wins.player2 / totalOptions;
+wins.drawProbability = wins.draw / totalOptions;
+wins.player1Rate = 1 / wins.player1Probability - 1;
+wins.player2Rate = 1 / wins.player2Probability - 1;
+wins.drawRate = 1 / wins.drawProbability - 1;
 console.log(wins);
 console.log(moment().diff(startTime) / 1000);
