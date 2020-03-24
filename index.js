@@ -7,13 +7,9 @@ var Combinatorics = require("js-combinatorics");
 var allCards = _.map(Cards.getAllCards(), n => {
   return n.shortName;
 });
-// allCards = _.filter(allCards, function(n) {
-//   return /s/i.test(n);
-// });
-// console.log(allCards);
-var player1Cards = ["As"];
+var player1Cards = ["As", "Ks"];
 var player1CardsRemaining = 3 - player1Cards.length;
-var player2Cards = [];
+var player2Cards = ["Ah", "Kh"];
 var player2CardsRemaining = 3 - player2Cards.length;
 var usedCards = _.union(player1Cards, player2Cards);
 var remainingCards = _.xor(allCards, usedCards);
@@ -22,7 +18,7 @@ var allCombinations = Combinatorics.bigCombination(
   6 - usedCards.length
 );
 var totalCombinations = allCombinations.length;
-console.log(totalCombinations);
+console.log("Total Length", totalCombinations);
 var wins = { player1: 0, player2: 0, draw: 0 };
 var i = 0;
 while ((a = allCombinations.next())) {
@@ -30,7 +26,6 @@ while ((a = allCombinations.next())) {
     a,
     player1CardsRemaining
   ).toArray();
-  console.log(tempPlayer1Cards);
 
   var bruteCards = _.map(tempPlayer1Cards, n => {
     return {
@@ -50,14 +45,17 @@ while ((a = allCombinations.next())) {
       wins.draw++;
     }
   });
-  return false;
+  i++;
+  if (i % 10000 == 0) {
+    console.log(i, moment().diff(startTime) / 1000, bruteCards.length);
+  }
 }
 
 wins.player1Probability = wins.player1 / totalCombinations;
 wins.player2Probability = wins.player2 / totalCombinations;
 wins.drawProbability = wins.draw / totalCombinations;
-wins.player1Rate = 1 / wins.player1Probability - 1;
-wins.player2Rate = 1 / wins.player2Probability - 1;
-wins.drawRate = 1 / wins.drawProbability - 1;
+wins.player1Rate = 1 / wins.player1Probability;
+wins.player2Rate = 1 / wins.player2Probability;
+wins.drawRate = 1 / wins.drawProbability;
 console.log(wins);
 console.log(moment().diff(startTime) / 1000);
