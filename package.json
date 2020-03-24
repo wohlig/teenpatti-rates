@@ -2,5 +2,11 @@
   "name": "teenpatti-rates",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "js-combinatorics": "^0.5.5",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "teenpattisolver": "^1.1.5"
+  }
 }
