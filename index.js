@@ -72,5 +72,4 @@ function getRatesForTeenPatti(openCards) {
   // console.log("Response Time in Seconds", moment().diff(startTime) / 1000);
   return wins;
 }
-
-getRatesForTeenPatti(openCardsReq);
+module.exports = getRatesForTeenPatti;
