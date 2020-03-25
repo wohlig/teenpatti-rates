@@ -1,5 +1,7 @@
 var teenPattiScore = require("teenpattisolver");
 var _ = require("lodash");
+var moment = require("moment");
+
 var Cards = require("./cards");
 var Combinatorics = require("js-combinatorics");
 var allCards = _.map(Cards.getAllCards(), n => {
@@ -75,3 +77,5 @@ module.exports = {
   cards: allCards,
   Combinatorics: Combinatorics
 };
+var startTime = moment();
+// console.log(getRatesForTeenPatti(openCardsReq));
